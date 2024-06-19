@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./src/output.css" rel="stylesheet" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            container: {
+              center: true,
+              padding: "2rem",
+              screens: {
+                sm: "100%",
+                md: "100%",
+                lg: "1024px",
+                xl: "1280px",
+                "2xl": "1350px",
+              },
+            },
+            animation: {
+              "wobble-horizontal": "wobble-horizontal 1s ease-in-out 1",
+              "slide-in-right": "slide-in-right .5s ease-in 1",
+              "slide-in-left": "slide-in-left .5s ease-in 1",
+              bouncing: "bouncing 1s infinite",
+              "slide-up": "slide-up .5s ease-in 1",
+            },
+            keyframes: {
+              "wobble-horizontal": {
+                "0%, 100%": { transform: "translateX(0)" },
+                "15%": { transform: "translateX(-30px) rotate(-6deg)" },
+                "30%": { transform: "translateX(15px) rotate(6deg)" },
+                "45%": { transform: "translateX(-15px) rotate(-3.6deg)" },
+                "60%": { transform: "translateX(9px) rotate(2.4deg)" },
+                "75%": { transform: "translateX(-6px) rotate(-1.2deg)" },
+              },
+
+              "slide-in-right": {
+                "0%": { transform: "translateX(-20%)", opacity: "0" },
+                "100%": { transform: "translateX(0)", opacity: "1" },
+              },
+              "slide-in-left": {
+                "0%": { transform: "translateX(20%)", opacity: "0" },
+                "100%": { transform: "translateX(0)", opacity: "1" },
+              },
+              "slide-up": {
+                "0%": { transform: "translateY(40px)", opacity: "0" },
+                "100%": { transform: "translateY(0)", opacity: "1" },
+              },
+              bouncing: {
+                "0%, 100%": { transform: "translateY(0)" },
+                "50%": { transform: "translateY(-20px)" },
+              },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <header class="bg-blue-500 pb-8">
+      <div class="container py-5 px-8 flex justify-between items-center">
+        <div class="">
+          <a href="/landingPage.html" class="text-3xl font-bold text-white"
+            >CreditBank</a
+          >
+        </div>
+        <div
+          class="z-50 group flex h-16 w-16 cursor-pointer items-center justify-center rounded-3xl bg-white p-2 hover:bg-slate-200 md:hidden"
+          id="nav-btn"
+        >
+          <div class="space-y-2">
+            <span
+              class="first-stroke block h-1 w-10 origin-center rounded-full bg-blue-500 transition-transform ease-in-out"
+            ></span>
+            <span
+              class="second-stroke block h-1 w-8 origin-center rounded-full bg-purple-900 transition-transform ease-in-out"
+            ></span>
+          </div>
+        </div>
+        <nav class="navi fixed z-30 md:top-0 bg-gradient-to-b from-blue-500 to-purple-600 md:from-transparent md:to-transparent md:bg-transparent top-0 left-0 bottom-0 w-0 overflow-hidden md:w-auto md:relative md:flex md:gap-6 md:items-center py-5 md:p-0 transition-all">
+          <ul
+            class="flex flex-col mt-20 md:mt-0 md:flex-row gap-4 text-xl md:text-lg text-blue-950 md:text-white items-center font-semibold mb-6 md:mb-0"
+          >
+            <li class="md:p-0">
+              <a href="#" class="hover:text-white md:hover:text-blue-950"
+                >Partners</a
+              >
+            </li>
+            <li>
+              <a href="#" class="hover:text-white md:hover:text-blue-950"
+                >About us</a
+              >
+            </li>
+            <li>
+              <a href="#" class="hover:text-white md:hover:text-blue-950"
+                >Careers</a
+              >
+            </li>
+            <li>
+              <a href="#" class="hover:text-white md:hover:text-blue-950"
+                >Blogs</a
+              >
+            </li>
+            <li>
+              <a href="#" class="hover:text-white md:hover:text-blue-950"
+                >Contact Us</a
+              >
+            </li>
+          </ul>
+          <a href="/signup.html" class="block align-middle transform perspective-1 hover:animate-wobble-horizontal shadow-2xl p-3 border border-blue-950 md:border-white text-blue-950 md:text-white mx-auto text-lg md:text-base">
+            Dashboard
+          </a>
+        </nav>
+      </div>
+
+      <div class="container flex flex-col-reverse md:flex-row justify-between items-center" >
+        <div class="w-full md:w-1/2 text-white">
+          <h1 class="text-5xl font-semibold mb-10 animate-slide-in-right">
+            Empowering SME’s by Easy Access to Credit
+          </h1>
+          <p class="mb-8 animate-slide-in-left">
+            We help SME’s take creadit easily for their business so that they
+            grow and remain sustainable
+          </p>
+          <a href="/signup.html" class="inline-block align-middle transform perspective-1 animate-slide-up hover:animate-wobble-horizontal shadow-2xl text-blue-500 bg-white py-3 px-6 rounded-md">
+            Apply for Credit
+          </a>
+        </div>
+        <div class="w-full md:w-1/2 animate-bouncing">
+          <img
+            src="./images/Business vision-rafiki 1.png"
+            alt=""
+            class="w-full"
+          />
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="py-5">
+        <div class="container py-5 flex flex-col md:flex-row justify-between items-center gap-5 xl:gap-52">
+          <div class="w-full md:w-1/2">
+            <h1 class="text-blue-500 text-5xl font-semibold">
+              Stock Up Easily with<span class="block text-blue-800"
+                >Easy Loan Process</span
+              >
+            </h1>
+            <p class="text-gray-500 mt-4">
+              Expand your business easily and grow with our easily available
+              loans at lowest available interest
+            </p>
+            <div class="flex gap-5 h-full mt-20">
+              <img src="images/Progress.png" alt="" class="" />
+              <div class="">
+                <ul
+                  class="list-none flex flex-col justify-between h-full text-blue-900 font-medium"
+                >
+                  <li>Same Day Approval</li>
+                  <li>Completely Online</li>
+                  <li>Easy Repayments</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="w-full md:w-1/2 animate-bouncing">
+            <img
+              src="images/Business mission-amico 1.png"
+              alt=""
+              class="w-full"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-[url('/images/Vector5.png')] bg-no-repeat bg-cover bg-center py-5"
+      >
+        <div class="flex flex-col justify-center items-center">
+          <img src="./images/Group 12.png" alt="" class="w-[80%]" />
+        </div>
+      </section>
+
+      <section class="py-5 mt-1-500">
+        <div class="container pt-24 pb-10 flex flex-col md:flex-row justify-between items-start gap-5 xl:gap-52">
+          <div class="w-full md:w-1/2 animate-bouncing h-full">
+            <img
+              src="images/Business merger-amico 1.png"
+              alt=""
+              class="w-full"
+            />
+          </div>
+          <div class="w-full md:w-1/2 flex flex-col justify-between h-[500px] md:h-[600px]">
+            <div class="">
+              <h1 class="text-blue-500 text-3xl mb-5">
+                No more waiting to start your business.
+                <span class="block text-blue-800"
+                  >Your search for Credit ends with us.</span
+                >
+              </h1>
+              <a href="/signup.html" class="inline-block align-middle transform perspective-1 animate-slide-up hover:animate-wobble-horizontal shadow-2xl text-white bg-blue-500 py-3 px-6 rounded-md">
+                Apply Now
+              </a>
+            </div>
+
+            <div class="flex justify-between items-center gap-5 md:gap-8 sm:self-end">
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-5 md:gap-8">
+                    <ul>
+                        <h1 class="text-blue-600 text-lg">Company</h1>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">About us</a></li>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Team</a></li>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Vision</a></li>
+                      </ul>
+                      <ul>
+                        <h1 class="text-blue-600 text-lg">Resource</h1>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Newsletter</a></li>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Books</a></li>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Pdf</a></li>
+                      </ul>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between items-center gap-5 md:gap-8">
+                    <ul>
+                        <h1 class="text-blue-600 text-lg">Legal</h1>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Policy</a></li>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Terms</a></li>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Conditions</a></li>
+                      </ul>
+                      <ul>
+                        <h1 class="text-blue-600 text-lg">Location</h1>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Nigeria</a></li>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Bangalore</a></li>
+                        <li class="text-gray-500"><a href="#" class="hover:text-blue-600">Delhi</a></li>
+                      </ul>
+                </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const navBtn = document.getElementById("nav-btn");
+      const navi = document.querySelector(".navi");
+      const firstStroke = document.querySelector(".first-stroke");
+      const secondStroke = document.querySelector(".second-stroke");
+
+      navBtn.addEventListener("click", function () {
+        firstStroke.classList.toggle("active");
+        secondStroke.classList.toggle("active");
+        navi.classList.toggle("full");
+      });
+    </script>
+  </body>
+</html>
