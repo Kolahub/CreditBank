@@ -24,14 +24,23 @@ loginForm.addEventListener('submit', async function (e) {
         }
     }
 
+    const loader = e.target.closest('#loginForm').querySelector('#loginLoader')
+    const btn = e.target.closest('#loginForm').querySelector('#loginBtn')
+
     try {
-        showLoader()
+        showLoader(loader)
+    btn.classList.add('cursor-not-allowed')
+
         await signInWithEmailAndPassword(auth, data.email, data.password)
         loginForm.reset()
-        hideLoader()
+        hideLoader(loader, 'Login')
+    btn.classList.remove('cursor-not-allowed')
+
         window.open('/dashboard.html')
     } catch (err) {
         errorDisplay(err.message)
-        hideLoader()
+        hideLoader(loader, 'Login')
+    btn.classList.remove('cursor-not-allowed')
+
     }
 })

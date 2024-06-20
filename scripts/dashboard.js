@@ -2,7 +2,7 @@ import { app } from "./firebase";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where, onSnapshot } from "firebase/firestore";
 import { format, formatDistanceToNow, parse } from "date-fns";
-import { errorDisplay, hideLoader, showLoader } from "./formSubmitted";
+import { errorDisplay, hideLoader, showLoader, sucxDisplay } from "./formSubmitted";
 
 const db = getFirestore();
 const auth = getAuth();
@@ -14,6 +14,7 @@ const accNumber = document.getElementById("accNumber");
 const transactionHistoryElement = document.getElementById("transactionHistory");
 const timeRange = document.getElementById("timeRange");
 const transactionForm = document.getElementById("transactionForm");
+const pageLoader = document.getElementById('pageLoader')
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -61,6 +62,15 @@ onAuthStateChanged(auth, async (user) => {
         document.getElementById("loanPurpose").textContent = "--- ---";
         document.getElementById("repayment").textContent = "--- ---";
       }
+
+      document.getElementById("userFullName").textContent = snapshot.data().fullName;
+      document.getElementById("userName").textContent = snapshot.data().userName;
+      document.getElementById("UserPhoneNo").textContent = snapshot.data().phoneNo;
+      document.getElementById("userEmail").textContent = user.email;
+
+      document.getElementById("profileImage").src = snapshot.data().userImgUrl || "images/person-fill.svg";
+
+      pageLoader.classList.add('hidden')
     });
   }
 });
@@ -97,80 +107,61 @@ const histDisplay = (arr) => {
 
   transactionHistoryElement.innerHTML = data;
 
-  const rcptTranDetails = document.getElementById('rcptTranDetails')
-  const rcptAccDetails = document.getElementById('rcptAccDetails')
-  let transaction = arr[arr.length - 1]
+  const rcptTranDetails = document.getElementById("rcptTranDetails");
+  const rcptAccDetails = document.getElementById("rcptAccDetails");
+  let transaction = arr[arr.length - 1];
 
-  function rcptUpdDisplay (transaction) {
-          // Parse the date string into a JavaScript Date object
-          const parsedDate = parse(transaction.date, 'yyyy-MM-dd HH:mm:ss', new Date());
+  function rcptUpdDisplay(transaction) {
+    // Parse the date string into a JavaScript Date object
+    const parsedDate = parse(transaction.date, "yyyy-MM-dd HH:mm:ss", new Date());
 
-          // Format the date to US format
-          const formattedDate = format(parsedDate, 'MM/dd/yyyy');
-    
-          // Extract the time
-          const formattedTime = format(parsedDate, 'HH:mm:ss');
-    
-          const TranData = `
+    // Format the date to US format
+    const formattedDate = format(parsedDate, "MM/dd/yyyy");
+
+    // Extract the time
+    const formattedTime = format(parsedDate, "HH:mm:ss");
+
+    const TranData = `
             <li><p class="font-medium text-lg">Date: <span class="font-normal">${formattedDate}</span></p></li>
             <li><p class="font-medium text-lg">Time: <span class="font-normal">${formattedTime}</span></p></li>
             <li><p class="font-medium text-lg">Time: <span class="font-normal">${transaction.description}</span></p></li>
             <li><p class="font-medium text-lg">Amount: <span class="font-normal">${new Intl.NumberFormat("en-NG", {
               style: "currency",
-              currency: "NGN"
+              currency: "NGN",
             }).format(transaction.amount)}</span></p></li>
             <li><p class="font-medium text-lg">Status: <span class="font-normal">Successful</span></p></li>
-            <li><p class="font-medium text-lg">Type: <span class="font-normal">${transaction.amount > 0 ? 'Credit' : 'Debit'}</span></p></li>`;
-    
-            const accData = `
+            <li><p class="font-medium text-lg">Type: <span class="font-normal">${transaction.amount > 0 ? "Credit" : "Debit"}</span></p></li>`;
+
+    const accData = `
             ${
-              transaction && transaction.rcvrFullName && transaction.amount < 0 ?
-              `<li><p class="font-medium text-lg">Sender Name: <span class="font-normal">${transaction.senderName}</span></p></li>
+              transaction && transaction.rcvrFullName && transaction.amount < 0
+                ? `<li><p class="font-medium text-lg">Sender Name: <span class="font-normal">${transaction.senderName}</span></p></li>
             <li><p class="font-medium text-lg">Sender Account Number: <span class="font-normal">${transaction.senderAccNo}</span></p></li>
             <li><p class="font-medium text-lg">Receiver Name: <span class="font-normal">${transaction.rcvrFullName}</span></p></li>
             <li><p class="font-medium text-lg">Receiver Account Number: <span class="font-normal">${transaction.rcvrAccNo}</span></p></li>
-            <li><p class="font-medium text-lg">Narration: <span class="font-normal">${transaction.rcvrFullName ? transaction.rcvrFullName : 'Nil'}/${transaction.description}</span></p></li>` :
-            
-            `<li><p class="font-medium text-lg">Narration: <span class="font-normal">${transaction.rcvrFullName ? transaction.rcvrFullName : 'Nil'}/${transaction.description}</span></p></li>`
-            }`
-    
-            rcptTranDetails.innerHTML = TranData;
-            rcptAccDetails.innerHTML = accData
+            <li><p class="font-medium text-lg">Narration: <span class="font-normal">${transaction.rcvrFullName ? transaction.rcvrFullName : "Nil"}/${
+                    transaction.description
+                  }</span></p></li>`
+                : `<li><p class="font-medium text-lg">Narration: <span class="font-normal">${
+                    transaction.rcvrFullName ? transaction.rcvrFullName : "Nil"
+                  }/${transaction.description}</span></p></li>`
+            }`;
+
+    rcptTranDetails.innerHTML = TranData;
+    rcptAccDetails.innerHTML = accData;
   }
 
-  rcptUpdDisplay(transaction)
+  rcptUpdDisplay(transaction);
 
-  transactionHistoryElement.addEventListener('click', function (e) {
-    if (e.target.closest('.rcpt')) {
-      const index = e.target.closest('.rcpt').dataset.index;
+  transactionHistoryElement.addEventListener("click", function (e) {
+    if (e.target.closest(".rcpt")) {
+      const index = e.target.closest(".rcpt").dataset.index;
       transaction = arr[index];
       // console.log(transaction);
-  rcptUpdDisplay(transaction)
+      rcptUpdDisplay(transaction);
     }
   });
-
 };
-
-document.addEventListener("DOMContentLoaded", function () {
-  const menu = document.getElementById("menu");
-  const sections = document.querySelectorAll(".sec");
-
-  menu.addEventListener("click", function (event) {
-    const button = event.target.closest(".comp");
-    if (button) {
-      const index = button.getAttribute("data-index");
-      if (index !== null) {
-        sections.forEach((section) => {
-          section.classList.add("hidden");
-        });
-        const activeSection = document.querySelector(`.sec[data-index='${index}']`);
-        if (activeSection) {
-          activeSection.classList.remove("hidden");
-        }
-      }
-    }
-  });
-});
 
 let myDoughnutChart = null; // Declare a variable to hold the Chart instance globally
 
@@ -339,8 +330,12 @@ transactionForm.addEventListener("submit", async (e) => {
   const lastKey = keys[keys.length - 1];
   delete data[lastKey];
 
+  const loader = e.target.closest('#transactionForm').querySelector('#submitSendLoader')
+  const btn = e.target.closest('#transactionForm').querySelector('#submitSendBtn')
+
   try {
-    showLoader();
+    showLoader(loader);
+    btn.classList.add('cursor-not-allowed')
     const newSenderTotalAmount = userData.data().totalAmount - Number(data.amount);
     const now = new Date();
     const formattedDate = format(now, "yyyy-MM-dd HH:mm:ss");
@@ -349,20 +344,20 @@ transactionForm.addEventListener("submit", async (e) => {
     const senderData = { ...data };
     const recevierData = { ...data };
     senderData.amount = -senderData.amount;
-    senderData.senderName = userData.data().fullName
-    senderData.senderAccNo = userData.data().accNo
+    senderData.senderName = userData.data().fullName;
+    senderData.senderAccNo = userData.data().accNo;
     recevierData.amount = +recevierData.amount;
-    recevierData.rcvrFullName = userData.data().fullName
+    recevierData.rcvrFullName = userData.data().fullName;
 
     const accountQuery = query(collection(db, "usersData"), where("accNo", "==", data.accountNumber));
     const snapshot = await getDocs(accountQuery);
 
     const accountData = snapshot.docs.map((doc) => doc.data());
 
-    if(accountData.length === 0) {
-      hideLoader();
-      errorDisplay('Account Number not valid.')
-      return
+    if (accountData.length === 0) {
+      hideLoader(loader, "Send");
+      errorDisplay("Account Number not valid.");
+      return;
     }
     const [receiverDoc] = accountData;
     const firstDoc = snapshot.docs[0];
@@ -370,9 +365,8 @@ transactionForm.addEventListener("submit", async (e) => {
     const docRef = doc(db, "usersData", docId);
     const newRecvrTotalAmount = Number(receiverDoc.totalAmount) + Number(data.amount);
 
-
-    senderData.rcvrFullName = receiverDoc.fullName
-    senderData.rcvrAccNo = receiverDoc.accNo
+    senderData.rcvrFullName = receiverDoc.fullName;
+    senderData.rcvrAccNo = receiverDoc.accNo;
 
     await updateDoc(userRef, {
       totalAmount: newSenderTotalAmount,
@@ -384,11 +378,14 @@ transactionForm.addEventListener("submit", async (e) => {
       transactionHist: [...receiverDoc.transactionHist, recevierData],
     });
 
-    hideLoader();
+    hideLoader(loader, "Send");
+    btn.classList.remove('cursor-not-allowed')
     transactionForm.reset();
   } catch (err) {
     errorDisplay(err.message);
-    hideLoader();
+    hideLoader(loader, "Send");
+    btn.classList.remove('cursor-not-allowed')
+
   }
 });
 
@@ -396,7 +393,6 @@ transactionForm.addEventListener("submit", async (e) => {
 const loanForm = document.querySelector("#loanForm");
 loanForm.addEventListener("submit", async function (e) {
   e.preventDefault();
-  showLoader()
   const user = auth.currentUser;
   const userRef = doc(db, "usersData", user.uid);
   const userData = await getDoc(userRef);
@@ -409,8 +405,8 @@ loanForm.addEventListener("submit", async function (e) {
   const obj = {
     amount: Number(data.amount),
     date: formattedDate,
-    description: 'Debts',
-  }
+    description: "Debts",
+  };
 
   for (const [key, value] of Object.entries(data)) {
     if (!value) {
@@ -440,10 +436,12 @@ loanForm.addEventListener("submit", async function (e) {
   }
 
   if (Number(data.income) < minIncomeThreshold) {
-    errorDisplay(`Your monthly income must be at least ${new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN",
-    }).format(minIncomeThreshold)}.`);
+    errorDisplay(
+      `Your monthly income must be at least ${new Intl.NumberFormat("en-NG", {
+        style: "currency",
+        currency: "NGN",
+      }).format(minIncomeThreshold)}.`
+    );
     loanForm.scrollIntoView({ behavior: "smooth", block: "start" });
     return;
   }
@@ -452,7 +450,12 @@ loanForm.addEventListener("submit", async function (e) {
 
   const newBalance = Number(userData.data().totalAmount) + Number(data.amount);
 
+  const loader = e.target.closest('#loanForm').querySelector('#submitLoanLoader')
+  const btn = e.target.closest('#loanForm').querySelector('#submitLoanBtn')
+
   try {
+    showLoader(loader)
+    btn.classList.add('cursor-not-allowed')
     await updateDoc(userRef, {
       totalAmount: newBalance,
       transactionHist: [...userData.data().transactionHist, obj],
@@ -460,10 +463,12 @@ loanForm.addEventListener("submit", async function (e) {
     });
     await activeLoanRepayment(data.duration);
     loanForm.reset();
-    hideLoader()
+    hideLoader(loader,"Submit Loan Request");
+    btn.classList.remove('cursor-not-allowed')
   } catch (err) {
     errorDisplay(err.message);
-    hideLoader()
+    hideLoader(loader, "Submit Loan Request");
+    btn.classList.remove('cursor-not-allowed')
   }
 });
 
@@ -489,8 +494,8 @@ document.getElementById("downloadRcptBtn").addEventListener("click", function ()
 
   // Temporarily adjust the element's width class for PDF generation
   const originalClass = element.className;
-  element.classList.remove('lg:w-1/2');
-  element.classList.add('w-full');
+  element.classList.remove("lg:w-1/2");
+  element.classList.add("w-full");
 
   // Generate PDF from the element and save it
   html2pdf()
@@ -502,9 +507,8 @@ document.getElementById("downloadRcptBtn").addEventListener("click", function ()
 
       // Restore the display of the download button
       downloadBtn.style.display = "block";
-    })
+    });
 });
-
 
 async function activeLoanRepayment(time) {
   const user = auth.currentUser;
@@ -515,12 +519,11 @@ async function activeLoanRepayment(time) {
     const now = new Date();
     const formattedDate = format(now, "yyyy-MM-dd HH:mm:ss");
 
-
     const obj = {
       amount: Number(-userData.data().debt.repayment),
       date: formattedDate,
-      description: 'Debts',
-    }
+      description: "Debts",
+    };
 
     await updateDoc(userRef, {
       totalAmount: newBalance,
@@ -531,12 +534,75 @@ async function activeLoanRepayment(time) {
   console.log("LOAN TIMER ACTIVATED");
 }
 
-
-document.getElementById('logoutBtn1').addEventListener('click', async function () {
+document.getElementById("logoutBtn1").addEventListener("click", async function () {
   try {
-  await signOut(auth)
-  window.location.href = 'landingPage.html'
-  } catch(err) {
-    errorDisplay(err.message)
+    await signOut(auth);
+    window.location.href = "landingPage.html";
+  } catch (err) {
+    errorDisplay(err.message);
   }
-})
+});
+
+//USER PROFILE
+document.getElementById("profileImage").addEventListener("click", function () {
+  document.getElementById("imageInput").click();
+});
+
+document.getElementById("imageInput").addEventListener("change", async function (e) {
+  const userAuth = auth.currentUser;
+  const userRef = doc(db, "usersData", userAuth.uid);
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = async function (event) {
+      document.getElementById("profileImage").src = event.target.result;
+      await updateDoc(userRef, {
+        userImgUrl: event.target.result,
+      });
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+document.getElementById("updatePinForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const userAuth = auth.currentUser;
+  const userRef = doc(db, "usersData", userAuth.uid);
+  const fd = new FormData(e.target);
+  const data = Object.fromEntries(fd.entries());
+  if (data.confirmNewPin !== data.newPin) {
+    errorDisplay("Your pin does not match");
+    return;
+  }
+  // Check if any of the input fields are empty
+  for (const [key, value] of Object.entries(data)) {
+    if (!value) {
+      errorDisplay(`The field "${key}" is empty. Please fill it out.`);
+      return; // Prevent form submission if any field is empty
+    }
+  }
+
+  const loader = e.target.closest('#updatePinForm').querySelector('#updatePinFormloader')
+  const btn = e.target.closest('#updatePinForm').querySelector('#updatePinFormBtn')
+
+  try {
+    showLoader(loader);
+    btn.classList.add('cursor-not-allowed')
+    await updateDoc(userRef, {
+      pin: data.newPin,
+    });
+    hideLoader(loader, "Update PIN");
+    btn.classList.remove('cursor-not-allowed')
+    sucxDisplay("Your pin has been updated successfully.");
+    e.target.reset();
+  } catch (err) {
+    hideLoader(loader, "Update PIN");
+    btn.classList.remove('cursor-not-allowed')
+    errorDisplay(err.message);
+  }
+});
+
+document.getElementById("logoutButton").addEventListener("click", async function () {
+  await signOut(auth);
+  window.location.href = "/landingPage.html";
+});

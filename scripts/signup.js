@@ -46,8 +46,12 @@ signupForm.addEventListener('submit', async function (e) {
             }
         }
 
+        const loader = e.target.closest('#signupForm').querySelector('#signupLoader')
+        const btn = e.target.closest('#signupForm').querySelector('#signupBtn')
+
     try {
-        showLoader()
+        showLoader(loader)
+    btn.classList.add('cursor-not-allowed')
         // Generate a unique account number
         const accountNumber = await generateUniqueAccountNumber();
         
@@ -87,10 +91,14 @@ signupForm.addEventListener('submit', async function (e) {
         });
         signupForm.reset()
         // console.log("User signed up:", user);
-        hideLoader()
+        hideLoader(loader, 'Sign up')
+    btn.classList.remove('cursor-not-allowed')
+
         window.open('/dashboard.html')
     } catch (error) {
         errorDisplay(err.message)
-        hideLoader()
+        hideLoader(loader, 'Sign up')
+    btn.classList.remove('cursor-not-allowed')
+
     }
 });
