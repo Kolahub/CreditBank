@@ -3,6 +3,7 @@ const path = require("path");
 module.exports = {
   mode: "development",
   entry: {
+    index: './scripts/index.js',
     signup: './scripts/signup.js',
     login: './scripts/login.js',
     resetPwsrd: './scripts/resetPwsrd.js',
