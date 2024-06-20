@@ -13,6 +13,21 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].bundle.js",
   },
-  watch: true
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]',
+              context: ''
+            }
+          },
+        ],
+      },
+    ],
+  },
+  watch: true,
 };
-// 
