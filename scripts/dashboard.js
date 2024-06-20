@@ -537,7 +537,7 @@ async function activeLoanRepayment(time) {
 document.getElementById("logoutBtn1").addEventListener("click", async function () {
   try {
     await signOut(auth);
-    window.location.href = "landingPage.html";
+    window.location.href = "index.html";
   } catch (err) {
     errorDisplay(err.message);
   }
@@ -604,5 +604,5 @@ document.getElementById("updatePinForm").addEventListener("submit", async functi
 
 document.getElementById("logoutButton").addEventListener("click", async function () {
   await signOut(auth);
-  window.location.href = "/landingPage.html";
+  window.location.href = "index.html";
 });
