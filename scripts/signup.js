@@ -8,6 +8,9 @@ import { errorDisplay, showLoader, hideLoader } from "./formSubmitted";
 const db = getFirestore();
 const auth = getAuth();
 
+
+
+
 async function generateUniqueAccountNumber() {
   let accountNumber;
   let accountExists = true;
